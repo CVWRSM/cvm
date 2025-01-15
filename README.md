@@ -9,7 +9,12 @@ is also a step toward devOps-style development, automating the integration of HE
 management system, rather than relying on manual updates or building locally from source.
 
 ## An evolving build system
-WRIMS can be built from this repository following the procedure described [here](./README.build.md).<br>
+The latest Feature/dev-ops WRIMS branch has been updated to use the Gradle build system.
+Instructions on how to build WRIMS following the gradle integration (2024) are located [here](./README.build-gradle.md).<br>
+
+The mainline WRIMS branch (DSS6) is exclusively built from Eclipse (Luna) and can be built from this 
+repository following the procedure described [here](./README.build.md).<br>
+
 As part of the movement toward devOps development, dependency analyses and proposals for re-organization of the 
 build have been added as README files within components of this repository.
 
@@ -51,54 +56,5 @@ The jar that's built from this branch (wrims-core) of the project does not conta
 antler classes. To run wrims using this jar, you'll need to include the antler runtime (v 3.5.2)
 in addition to the wrims-core jar to replace the old WRIMSv2.jar.
 
-## How to build wrims installer From GitHub Releases
-The installer and patch zip files are automatically generated when a new "Release" is created from
-the github wrims site (https://github.com/CentralValleyModeling/wrims).
 
-1. From the github wrims home page (https://github.com/CentralValleyModeling/wrims/) click the "Releases"
-   link on the right hand side. Direct link: https://github.com/CentralValleyModeling/wrims/releases
-
-2. From the Releases page, select "Draft a new release" button at the top of the page.
-   Direct link: https://github.com/CentralValleyModeling/wrims/releases/new
-
-3. Click the "Choose a tag" drop down and type in a new tag name in the "Find or create new tag" field.
-   For an internal release, use a date stamp in the format of "YYYYMMDD" (e.g. 20241224).
-
-4. Click the "Target" branch drop down and select the branch you'd like to build the installer from.
-
-5. Click "Generate release notes" to automatically pull PR change logs into the release notes.
-
-6. Enter a title in the "Release Title" field. Typically, this matches the tag name.
-
-7. (OPTIONAL) Add any additional notes to the Description field
-
-8. If this is a non-production ready release, check the "Set as a pre-release" checkbox.
-
-9. Click "Publish Release"
-
-The installer and patch zip will be automatically generated and added to the new Release.
-
-## How to build the installer/patch zip files locally
-The installer can be built by running the "zipWrimsGui" task in the wrims-gui module.
-The patch can be built by running the "zipWrimsPatch" task in the wrims-gui module.
-
-The generated wrims install zip file will be located in the /wrims-gui/build/installer
-folder. The installer file will be named: wrims_gui_x64_<branch-name>.zip
-
-The generated wrims patch zip file will be located in the /wrims-gui/build/patch
-folder. The patch file will be named: wrims_patch_v2.2.0_basis.zip
-
-### From developer linux terminal:
-You can build the installer and patch by running the following linux command from the root of the project:
-```
-./gradlew :wrims-gui:zipWrimsGui
-./gradlew :wrims-gui:zipWrimsPatch
-```
-
-### From developer windows command line / terminal:
-You can build the installer and patch by running the following command from the root of the project:
-```
-gradlew.bat :wrims-gui:zipWrimsGui
-gradlew.bat :wrims-gui:zipWrimsPatch
-```
 
