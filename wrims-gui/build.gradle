@@ -37,9 +37,15 @@ tasks.register('downloadWrimsGuiInstaller', Download) {
     onlyIfModified true
 }
 
+//clear the installer directory
+tasks.register('clearInstallerFolder', Delete) {
+    dependsOn downloadWrimsGuiInstaller
+    delete "${buildDir}/installer"
+}
+
 // Task to download and unzip the ZIP file
 tasks.register('unzipWrimsGuiTemplate', Copy) {
-    dependsOn downloadWrimsGuiInstaller
+    dependsOn clearInstallerFolder
     from(zipTree(new File(wrimsGuiDownload)))
     into("${buildDir}/installer")
 }
@@ -128,7 +134,8 @@ tasks.register('copyResources', Copy) {
 
 //Add the release date to the installer
 //generate a releasedate.log file that contains the current date in MM/DD/YYYY format
-tasks.register('addReleaseDate', DefaultTask) {
+tasks.register('buildWrimsInstall', DefaultTask) {
+    group 'install'
     dependsOn copyResources
     doLast {
         def releaseDateFile = file("${buildDir}/installer/${wrimsGuiFolder}/releasedate.log")
@@ -138,11 +145,34 @@ tasks.register('addReleaseDate', DefaultTask) {
 
 // Task that zips the wrims_gui_x64_${version} folder into a zip file
 tasks.register('zipWrimsGui', Zip) {
-    group 'zip-installer'
-    dependsOn addReleaseDate
+    group 'release'
+    dependsOn buildWrimsInstall
     from("${buildDir}/installer/${wrimsGuiFolder}")
     archiveFileName = "${wrimsGuiFolder}.zip"
     destinationDirectory = file("${buildDir}/installer")
+}
+
+//task that runs the bat file in build/download/${WRIMS_GUI_FOLDER/WRIMS2_GUI_Start.bat
+//NOTE: You must build the installer before you can run it with this task using the buildWrimsInstall task
+tasks.register('runWrimsGui') {
+    group 'run'
+    doLast {
+        def processBuilder = new ProcessBuilder('cmd', '/c', 'WRIMS2_GUI_Start.bat')
+        processBuilder.directory(new File("${buildDir}/installer/${wrimsGuiFolder}"))
+        def process = processBuilder.start()
+    }
+}
+
+//task that runs the bat file in build/download/${WRIMS_GUI_FOLDER/WRIMS2_GUI_Debug.bat
+//This launches WRIMS with remote debugging enabled
+//NOTE: You must build the installer before you can run it with this task using the buildWrimsInstall task
+tasks.register('debugWrimsGui') {
+    group 'debug'
+    doLast {
+        def processBuilder = new ProcessBuilder('cmd', '/c', 'WRIMS2_GUI_Debug.bat')
+        processBuilder.directory(new File("${buildDir}/installer/${wrimsGuiFolder}"))
+        def process = processBuilder.start()
+    }
 }
 
 //-------- PATCH INSTALLER BUILD TASKS---------------
@@ -213,7 +243,7 @@ tasks.register('addReleaseDateToPatchDeployment', DefaultTask) {
 //Zip patch files
 // Task that zips the wrims_gui_x64_${version} folder into a zip file
 tasks.register('zipWrimsPatch', Zip) {
-    group = 'zip-installer'
+    group = 'release'
     dependsOn addReleaseDateToPatchDeployment
     from("${buildDir}/patch/${wrimsPatchFolder}")
     archiveFileName = "${wrimsPatchFolder}.zip"

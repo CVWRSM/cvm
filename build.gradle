@@ -7,6 +7,10 @@ plugins {
     id 'eclipse'
 }
 
+allprojects {
+    apply plugin: 'eclipse'
+}
+
 // This utilizes Git Tag based versioning to set the version of the project based on the current Git Branch or Tag.
 // If a tag is checked out, the version will be the name of the most recent tag on this commit.
 // Otherwise, the version will be branchname-SNAPSHOT.
@@ -19,6 +23,5 @@ def versionLabel(gitInfo) {
 
 allprojects {
     group = 'gov.ca.dwr'
-//    version = versionLabel(versionDetails())
-    version = "20250108"
+    version = versionLabel(versionDetails())
 }
