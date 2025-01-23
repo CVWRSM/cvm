@@ -4,6 +4,7 @@
 plugins {
     id "com.palantir.git-version" version "3.0.0"
     id 'base'
+    id 'eclipse'
 }
 
 // This utilizes Git Tag based versioning to set the version of the project based on the current Git Branch or Tag.
@@ -18,5 +19,6 @@ def versionLabel(gitInfo) {
 
 allprojects {
     group = 'gov.ca.dwr'
-    version = versionLabel(versionDetails())
+//    version = versionLabel(versionDetails())
+    version = "20250108"
 }

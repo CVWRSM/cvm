@@ -24,21 +24,24 @@ dependencies {
     implementation fileTree(dir: '../eclipse-luna-libs', include: ['*.jar'])
 }
 
-task runMwe2(type: JavaExec) {
-    main = 'org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher'
-    classpath = sourceSets.main.runtimeClasspath
-    args = ['src/main/resources/gov/ca/dwr/wresl/xtext/editor/GenerateWreslEditor.mwe2']
-    jvmArgs = ['-Xmx512m']
-    ignoreExitValue = true
-}
-
-compileJava {
-    options.failOnError = false
-    doLast {
-        if (compileJava.didWork && compileJava.state.failure != null) {
-            logger.warn("Ignoring compile errors in compileJava task")
-        }
-    }
-}
-
-runMwe2.dependsOn classes
+//NOTE: The following runMwe2 task was used to manually trigger the antlr generation.
+//      Commenting it out to resolve gradle build issue from eclipse
+//--------------------------------
+//task runMwe2(type: JavaExec) {
+//    main = 'org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher'
+//    classpath = sourceSets.main.runtimeClasspath
+//    args = ['src/main/resources/gov/ca/dwr/wresl/xtext/editor/GenerateWreslEditor.mwe2']
+//    jvmArgs = ['-Xmx512m']
+//    ignoreExitValue = true
+//}
+//
+//compileJava {
+//    options.failOnError = false
+//    doLast {
+//        if (compileJava.didWork && compileJava.state.failure != null) {
+//            logger.warn("Ignoring compile errors in compileJava task")
+//        }
+//    }
+//}
+//
+//runMwe2.dependsOn classes

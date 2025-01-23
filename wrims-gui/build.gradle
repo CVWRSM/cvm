@@ -21,6 +21,8 @@ def wrimsGuiDownload = "${buildDir}/download/wrims2_gui_download.zip"
 def wrimsPatchFolder = "wrims_patch_v2.2.0_basis"
 def wrimsPatchReleaseDateFile = "releasedate_v2.2.0_basis.log"
 
+group = 'other'
+
 //task to unzip the contents of the third-party jar into a temp folder
 tasks.register('unzipThirdPartyLibs', Copy) {
     from(zipTree(project(':third-party').tasks.named('jar').get().archiveFile))
@@ -136,6 +138,7 @@ tasks.register('addReleaseDate', DefaultTask) {
 
 // Task that zips the wrims_gui_x64_${version} folder into a zip file
 tasks.register('zipWrimsGui', Zip) {
+    group 'zip-installer'
     dependsOn addReleaseDate
     from("${buildDir}/installer/${wrimsGuiFolder}")
     archiveFileName = "${wrimsGuiFolder}.zip"
@@ -210,6 +213,7 @@ tasks.register('addReleaseDateToPatchDeployment', DefaultTask) {
 //Zip patch files
 // Task that zips the wrims_gui_x64_${version} folder into a zip file
 tasks.register('zipWrimsPatch', Zip) {
+    group = 'zip-installer'
     dependsOn addReleaseDateToPatchDeployment
     from("${buildDir}/patch/${wrimsPatchFolder}")
     archiveFileName = "${wrimsPatchFolder}.zip"
