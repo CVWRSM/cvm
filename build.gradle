@@ -4,6 +4,11 @@
 plugins {
     id "com.palantir.git-version" version "3.0.0"
     id 'base'
+    id 'eclipse'
+}
+
+allprojects {
+    apply plugin: 'eclipse'
 }
 
 // This utilizes Git Tag based versioning to set the version of the project based on the current Git Branch or Tag.
